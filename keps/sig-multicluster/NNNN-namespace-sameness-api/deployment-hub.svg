@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="800" viewBox="0 0 960 800" role="img" aria-labelledby="title description">
+  <title id="title">Resources on a hub cluster</title>
+  <desc id="description">A hub cluster stores the API resources in a namespace named inventory. That namespace contains NamespaceSameness foo-app, its Slice foo-app-1, and ClusterProfiles representing cluster-a and cluster-b. The Slice references both profiles. The member clusters each run an MCS controller; green arrows show both controllers reading the Slices and ClusterProfiles on the hub. The blue band at the bottom encloses the foo-app Namespace in both member clusters. The arrows show API reads, not workload traffic or creation of Namespaces. Producers that publish resources are not shown.</desc>
+  <defs>
+    <marker id="reference-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#526574"/></marker>
+    <marker id="watch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#23745c"/></marker>
+  </defs>
+  <rect width="960" height="800" fill="#ffffff"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#243746" stroke-linejoin="round" stroke-linecap="round">
+    <text x="32" y="47" font-size="28" fill="#243746" font-weight="700" text-anchor="start">Resources on a hub cluster</text>
+    <!-- Resource placement and API reads; producers and workload traffic are omitted. -->
+    <rect x="32" y="548" width="420" height="212" rx="10" fill="#f7f9fb" stroke="#8595a3" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="242" y="580" font-size="24" fill="#243746" font-weight="600" text-anchor="middle">cluster-a</text>
+    <rect x="508" y="548" width="420" height="212" rx="10" fill="#f7f9fb" stroke="#8595a3" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="718" y="580" font-size="24" fill="#243746" font-weight="600" text-anchor="middle">cluster-b</text>
+    <rect x="184" y="88" width="592" height="428" rx="10" fill="#f7f9fb" stroke="#8595a3" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="480" y="120" font-size="24" fill="#243746" font-weight="600" text-anchor="middle">hub</text>
+    <path d="M 213 148 V 141 H 255 L 263 148" fill="#ffffff" stroke="#8595a3" stroke-width="1.7"/>
+    <rect x="204" y="148" width="552" height="350" rx="5" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <text x="222" y="177" font-size="19" fill="#526574" font-weight="600" text-anchor="start">Namespace: inventory</text>
+    <path d="M 334 194 H 614 L 630 210 V 254 Q 630 258 626 258 H 334 Q 330 258 330 254 V 198 Q 330 194 334 194 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 614 194 V 210 H 630" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="480" y="220" font-size="18" fill="#243746" font-weight="600" text-anchor="middle">NamespaceSameness</text>
+    <text x="480" y="245" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">foo-app</text>
+    <rect x="220" y="286" width="520" height="194" rx="17" fill="#e7f0fc" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 480 258 V 299" fill="none" stroke="#526574" stroke-width="1.7"/>
+    <text x="494" y="280" font-size="16" fill="#526574" font-weight="400" text-anchor="start">owns</text>
+    <path d="M 334 300 H 614 L 630 316 V 366 Q 630 370 626 370 H 334 Q 330 370 330 366 V 304 Q 330 300 334 300 Z" fill="#ffffff" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 614 300 V 316 H 630" fill="none" stroke="#2869ad" stroke-width="1.7"/>
+    <text x="480" y="326" font-size="18" fill="#243746" font-weight="600" text-anchor="middle">NamespaceSamenessSlice</text>
+    <text x="480" y="357" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">foo-app-1</text>
+    <path d="M 480 370 V 390 M 349 411 V 390 H 611 V 411" fill="none" stroke="#526574" stroke-width="1.7"/>
+    <text x="480" y="413" font-size="16" fill="#526574" font-weight="400" text-anchor="middle">references</text>
+    <path d="M 248 416 H 438 L 454 432 V 472 Q 454 476 450 476 H 248 Q 244 476 244 472 V 420 Q 244 416 248 416 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 438 416 V 432 H 454" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="349" y="442" font-size="17" fill="#243746" font-weight="600" text-anchor="middle">ClusterProfile</text>
+    <text x="349" y="463" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">cluster-a</text>
+    <path d="M 510 416 H 700 L 716 432 V 472 Q 716 476 712 476 H 510 Q 506 476 506 472 V 420 Q 506 416 510 416 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 700 416 V 432 H 716" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="611" y="442" font-size="17" fill="#243746" font-weight="600" text-anchor="middle">ClusterProfile</text>
+    <text x="611" y="463" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">cluster-b</text>
+    <path d="M 349 406 V 412" fill="none" stroke="#526574" stroke-width="1.7" marker-end="url(#reference-arrow)"/>
+    <path d="M 611 406 V 412" fill="none" stroke="#526574" stroke-width="1.7" marker-end="url(#reference-arrow)"/>
+    <path d="M 220 354 H 72 V 620 H 104" fill="none" stroke="#23745c" stroke-width="2.2" marker-end="url(#watch-arrow)"/>
+    <path d="M 740 354 H 888 V 620 H 856" fill="none" stroke="#23745c" stroke-width="2.2" marker-end="url(#watch-arrow)"/>
+    <text x="86" y="540" font-size="18" fill="#23745c" font-weight="400" text-anchor="start">list / watch</text>
+    <text x="874" y="540" font-size="18" fill="#23745c" font-weight="400" text-anchor="end">list / watch</text>
+    <!-- Both layouts use the same controller and application positions. -->
+    <rect x="112" y="592" width="260" height="56" rx="8" fill="#ffffff" stroke="#23745c" stroke-width="1.5"/>
+    <text x="242" y="627" font-size="22" fill="#243746" font-weight="600" text-anchor="middle">MCS controller</text>
+    <rect x="588" y="592" width="260" height="56" rx="8" fill="#ffffff" stroke="#23745c" stroke-width="1.5"/>
+    <text x="718" y="627" font-size="22" fill="#243746" font-weight="600" text-anchor="middle">MCS controller</text>
+    <text x="480" y="681" font-size="20" fill="#2869ad" font-weight="600" text-anchor="middle">foo-app sameness</text>
+    <rect x="94" y="694" width="772" height="58" rx="17" fill="#e7f0fc" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 168 706 V 699 H 210 L 218 706" fill="#ffffff" stroke="#2869ad" stroke-width="1.7"/>
+    <rect x="159" y="706" width="166" height="36" rx="5" fill="#ffffff" stroke="#2869ad" stroke-width="1.5"/>
+    <text x="242" y="732" font-size="22" fill="#243746" font-weight="400" text-anchor="middle">foo-app</text>
+    <path d="M 644 706 V 699 H 686 L 694 706" fill="#ffffff" stroke="#2869ad" stroke-width="1.7"/>
+    <rect x="635" y="706" width="166" height="36" rx="5" fill="#ffffff" stroke="#2869ad" stroke-width="1.5"/>
+    <text x="718" y="732" font-size="22" fill="#243746" font-weight="400" text-anchor="middle">foo-app</text>
+  </g>
+</svg>
