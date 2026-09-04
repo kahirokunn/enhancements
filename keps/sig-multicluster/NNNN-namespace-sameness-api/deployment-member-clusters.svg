@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="800" viewBox="0 0 960 800" role="img" aria-labelledby="title description">
+  <title id="title">Resources on member clusters</title>
+  <desc id="description">Two member clusters, cluster-a and cluster-b, each store the API resources in a namespace named inventory. Each of those namespaces contains a NamespaceSameness named foo-app, its Slice foo-app-1, and separate ClusterProfile objects representing both cluster-a and cluster-b. Each Slice references the two profiles in its own API. Green arrows show each MCS controller reading its local Slices and ClusterProfiles. The blue band at the bottom encloses foo-app in both member clusters: the two independently published groups describe the same intended relationship. Resource UIDs and references are local to each API; the diagram does not merge groups across API servers. Publication and synchronization are handled by the deployment and are not shown.</desc>
+  <defs>
+    <marker id="reference-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#526574"/></marker>
+    <marker id="watch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#23745c"/></marker>
+  </defs>
+  <rect width="960" height="800" fill="#ffffff"/>
+  <g font-family="Arial, Helvetica, sans-serif" fill="#243746" stroke-linejoin="round" stroke-linecap="round">
+    <text x="32" y="47" font-size="28" fill="#243746" font-weight="700" text-anchor="start">Resources on member clusters</text>
+    <!-- Resource placement and API reads; producers and workload traffic are omitted. -->
+    <rect x="32" y="88" width="420" height="672" rx="10" fill="#f7f9fb" stroke="#8595a3" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="242" y="120" font-size="24" fill="#243746" font-weight="600" text-anchor="middle">cluster-a</text>
+    <rect x="508" y="88" width="420" height="672" rx="10" fill="#f7f9fb" stroke="#8595a3" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="718" y="120" font-size="24" fill="#243746" font-weight="600" text-anchor="middle">cluster-b</text>
+    <path d="M 61 148 V 141 H 103 L 111 148" fill="#ffffff" stroke="#8595a3" stroke-width="1.7"/>
+    <rect x="52" y="148" width="380" height="368" rx="5" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <text x="70" y="177" font-size="19" fill="#526574" font-weight="600" text-anchor="start">Namespace: inventory</text>
+    <path d="M 92 194 H 380 L 396 210 V 254 Q 396 258 392 258 H 92 Q 88 258 88 254 V 198 Q 88 194 92 194 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 380 194 V 210 H 396" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="242" y="220" font-size="18" fill="#243746" font-weight="600" text-anchor="middle">NamespaceSameness</text>
+    <text x="242" y="245" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">foo-app</text>
+    <rect x="68" y="286" width="348" height="212" rx="17" fill="#e7f0fc" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 242 258 V 299" fill="none" stroke="#526574" stroke-width="1.7"/>
+    <text x="256" y="280" font-size="16" fill="#526574" font-weight="400" text-anchor="start">owns</text>
+    <path d="M 92 300 H 380 L 396 316 V 366 Q 396 370 392 370 H 92 Q 88 370 88 366 V 304 Q 88 300 92 300 Z" fill="#ffffff" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 380 300 V 316 H 396" fill="none" stroke="#2869ad" stroke-width="1.7"/>
+    <text x="242" y="326" font-size="18" fill="#243746" font-weight="600" text-anchor="middle">NamespaceSamenessSlice</text>
+    <text x="242" y="357" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">foo-app-1</text>
+    <path d="M 242 370 V 390 M 158 415 V 390 H 326 V 415" fill="none" stroke="#526574" stroke-width="1.7"/>
+    <text x="242" y="410" font-size="16" fill="#526574" font-weight="400" text-anchor="middle">references</text>
+    <path d="M 88 424 H 216 L 232 440 V 480 Q 232 484 228 484 H 88 Q 84 484 84 480 V 428 Q 84 424 88 424 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 216 424 V 440 H 232" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="158" y="450" font-size="16" fill="#243746" font-weight="600" text-anchor="middle">ClusterProfile</text>
+    <text x="158" y="471" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">cluster-a</text>
+    <path d="M 256 424 H 384 L 400 440 V 480 Q 400 484 396 484 H 256 Q 252 484 252 480 V 428 Q 252 424 256 424 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 384 424 V 440 H 400" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="326" y="450" font-size="16" fill="#243746" font-weight="600" text-anchor="middle">ClusterProfile</text>
+    <text x="326" y="471" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">cluster-b</text>
+    <path d="M 158 412 V 420" fill="none" stroke="#526574" stroke-width="1.7" marker-end="url(#reference-arrow)"/>
+    <path d="M 326 412 V 420" fill="none" stroke="#526574" stroke-width="1.7" marker-end="url(#reference-arrow)"/>
+    <path d="M 242 498 V 584" fill="none" stroke="#23745c" stroke-width="2.2" marker-end="url(#watch-arrow)"/>
+    <text x="257" y="552" font-size="18" fill="#23745c" font-weight="400" text-anchor="start">list / watch</text>
+    <path d="M 537 148 V 141 H 579 L 587 148" fill="#ffffff" stroke="#8595a3" stroke-width="1.7"/>
+    <rect x="528" y="148" width="380" height="368" rx="5" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <text x="546" y="177" font-size="19" fill="#526574" font-weight="600" text-anchor="start">Namespace: inventory</text>
+    <path d="M 568 194 H 856 L 872 210 V 254 Q 872 258 868 258 H 568 Q 564 258 564 254 V 198 Q 564 194 568 194 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 856 194 V 210 H 872" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="718" y="220" font-size="18" fill="#243746" font-weight="600" text-anchor="middle">NamespaceSameness</text>
+    <text x="718" y="245" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">foo-app</text>
+    <rect x="544" y="286" width="348" height="212" rx="17" fill="#e7f0fc" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 718 258 V 299" fill="none" stroke="#526574" stroke-width="1.7"/>
+    <text x="732" y="280" font-size="16" fill="#526574" font-weight="400" text-anchor="start">owns</text>
+    <path d="M 568 300 H 856 L 872 316 V 366 Q 872 370 868 370 H 568 Q 564 370 564 366 V 304 Q 564 300 568 300 Z" fill="#ffffff" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 856 300 V 316 H 872" fill="none" stroke="#2869ad" stroke-width="1.7"/>
+    <text x="718" y="326" font-size="18" fill="#243746" font-weight="600" text-anchor="middle">NamespaceSamenessSlice</text>
+    <text x="718" y="357" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">foo-app-1</text>
+    <path d="M 718 370 V 390 M 634 415 V 390 H 802 V 415" fill="none" stroke="#526574" stroke-width="1.7"/>
+    <text x="718" y="410" font-size="16" fill="#526574" font-weight="400" text-anchor="middle">references</text>
+    <path d="M 564 424 H 692 L 708 440 V 480 Q 708 484 704 484 H 564 Q 560 484 560 480 V 428 Q 560 424 564 424 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 692 424 V 440 H 708" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="634" y="450" font-size="16" fill="#243746" font-weight="600" text-anchor="middle">ClusterProfile</text>
+    <text x="634" y="471" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">cluster-a</text>
+    <path d="M 732 424 H 860 L 876 440 V 480 Q 876 484 872 484 H 732 Q 728 484 728 480 V 428 Q 728 424 732 424 Z" fill="#ffffff" stroke="#8595a3" stroke-width="1.5"/>
+    <path d="M 860 424 V 440 H 876" fill="none" stroke="#8595a3" stroke-width="1.7"/>
+    <text x="802" y="450" font-size="16" fill="#243746" font-weight="600" text-anchor="middle">ClusterProfile</text>
+    <text x="802" y="471" font-size="20" fill="#526574" font-weight="400" text-anchor="middle">cluster-b</text>
+    <path d="M 634 412 V 420" fill="none" stroke="#526574" stroke-width="1.7" marker-end="url(#reference-arrow)"/>
+    <path d="M 802 412 V 420" fill="none" stroke="#526574" stroke-width="1.7" marker-end="url(#reference-arrow)"/>
+    <path d="M 718 498 V 584" fill="none" stroke="#23745c" stroke-width="2.2" marker-end="url(#watch-arrow)"/>
+    <text x="733" y="552" font-size="18" fill="#23745c" font-weight="400" text-anchor="start">list / watch</text>
+    <!-- Both layouts use the same controller and application positions. -->
+    <rect x="112" y="592" width="260" height="56" rx="8" fill="#ffffff" stroke="#23745c" stroke-width="1.5"/>
+    <text x="242" y="627" font-size="22" fill="#243746" font-weight="600" text-anchor="middle">MCS controller</text>
+    <rect x="588" y="592" width="260" height="56" rx="8" fill="#ffffff" stroke="#23745c" stroke-width="1.5"/>
+    <text x="718" y="627" font-size="22" fill="#243746" font-weight="600" text-anchor="middle">MCS controller</text>
+    <text x="480" y="681" font-size="20" fill="#2869ad" font-weight="600" text-anchor="middle">foo-app sameness</text>
+    <rect x="94" y="694" width="772" height="58" rx="17" fill="#e7f0fc" stroke="#2869ad" stroke-width="1.5"/>
+    <path d="M 168 706 V 699 H 210 L 218 706" fill="#ffffff" stroke="#2869ad" stroke-width="1.7"/>
+    <rect x="159" y="706" width="166" height="36" rx="5" fill="#ffffff" stroke="#2869ad" stroke-width="1.5"/>
+    <text x="242" y="732" font-size="22" fill="#243746" font-weight="400" text-anchor="middle">foo-app</text>
+    <path d="M 644 706 V 699 H 686 L 694 706" fill="#ffffff" stroke="#2869ad" stroke-width="1.7"/>
+    <rect x="635" y="706" width="166" height="36" rx="5" fill="#ffffff" stroke="#2869ad" stroke-width="1.5"/>
+    <text x="718" y="732" font-size="22" fill="#243746" font-weight="400" text-anchor="middle">foo-app</text>
+  </g>
+</svg>
