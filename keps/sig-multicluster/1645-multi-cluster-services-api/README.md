@@ -87,6 +87,7 @@ tags, and then generate with `hack/update-toc.sh`.
   - [User Stories](#user-stories)
     - [Different ClusterIP Services Each Deployed to Separate Cluster](#different-clusterip-services-each-deployed-to-separate-cluster)
     - [Single Service Deployed to Multiple Clusters](#single-service-deployed-to-multiple-clusters)
+    - [Troubleshooting a Service Export](#troubleshooting-a-service-export)
   - [Constraints](#constraints)
   - [Risks and Mitigations](#risks-and-mitigations)
 - [Design Details](#design-details)
@@ -350,6 +351,12 @@ removal without action by or impact on the caller. Routing to my replicated
 service should optimize for cost metric (e.g. prioritize traffic local to zone,
 region).
 
+#### Troubleshooting a Service Export
+
+I operate a cluster that exports services to other clusters in a clusterset.
+When troubleshooting an export, I want to see which clusters the service is
+exported to.
+
 ### Constraints
 
 <!--
@@ -378,6 +385,10 @@ How will UX be reviewed and by whom?
 
 Consider including folks that also work outside the SIG or subproject.
 -->
+
+`ServiceExport.Status.Clusters` shows anyone who can read the `ServiceExport`
+which clusters the service is exported to. Implementations may leave the field
+absent (see [Exporting Services](#exporting-services)).
 
 ## Design Details
 
@@ -426,6 +437,14 @@ type ServiceExportSpec struct {
 
 // ServiceExportStatus contains the current status of an export.
 type ServiceExportStatus struct {
+        // clusters is the list of other clusters to which the service is
+        // exported. This field is informational only.
+        // +optional
+        // +patchStrategy=merge
+        // +patchMergeKey=cluster
+        // +listType=map
+        // +listMapKey=cluster
+        Clusters []ClusterStatus `json:"clusters,omitempty"`
         // +optional
         // +patchStrategy=merge
         // +patchMergeKey=type
@@ -442,6 +461,11 @@ metadata:
   name: my-svc
   namespace: my-ns
 status:
+  clusters:
+  - cluster: cluster-b
+  - cluster: cluster-c
+  - cluster: cluster-d
+  - cluster: cluster-e
   conditions:
   - type: Valid
     status: "True"
@@ -459,6 +483,14 @@ status:
     reason: TypeConflict
     message: "Conflicting type. Using \"ClusterSetIP\" from oldest service export in \"cluster-1\". 2/5 clusters disagree."
 ```
+
+Implementations may list in `ServiceExport.Status.Clusters` the other clusters
+to which the service is exported. The field is informational only and does not
+affect export, import, or routing. Entries identify clusters by cluster name.
+
+An entry means that the service is available for that cluster to import, even
+if the cluster does not have the namespace or has not imported it. An absent or
+empty list does not mean that there are no such clusters.
 
 To export a service, a `ServiceExport` should be created within the cluster and
 namespace that the service resides in, name-mapped to the service for export -
@@ -634,6 +666,8 @@ type ServiceImportStatus struct {
   // +kubebuilder:validation:Enum=Present;Absent
   // +optional
   EndpointSliceObjects EndpointSliceObjectsStatus `json:"endpointSliceObjects,omitempty"`
+  // clusters is the list of exporting clusters from which this service
+  // was derived.
   // +optional
   // +patchStrategy=merge
   // +patchMergeKey=cluster
@@ -648,7 +682,7 @@ type ServiceImportStatus struct {
   Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }
 
-// ClusterStatus contains service configuration mapped to a specific source cluster
+// ClusterStatus contains service configuration mapped to a specific cluster
 type ClusterStatus struct {
  Cluster string `json:"cluster"`
 }
