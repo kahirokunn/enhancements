@@ -87,6 +87,7 @@ tags, and then generate with `hack/update-toc.sh`.
   - [User Stories](#user-stories)
     - [Different ClusterIP Services Each Deployed to Separate Cluster](#different-clusterip-services-each-deployed-to-separate-cluster)
     - [Single Service Deployed to Multiple Clusters](#single-service-deployed-to-multiple-clusters)
+    - [Service Exported to a Subset of Clusters](#service-exported-to-a-subset-of-clusters)
     - [Troubleshooting a Service Export](#troubleshooting-a-service-export)
   - [Constraints](#constraints)
   - [Risks and Mitigations](#risks-and-mitigations)
@@ -124,6 +125,7 @@ tags, and then generate with `hack/update-toc.sh`.
   - [Export via annotation](#export-via-annotation)
   - [Other conflict resolution algorithms](#other-conflict-resolution-algorithms)
   - [Exporting labels/annotations from the Service/ServiceExport objects](#exporting-labelsannotations-from-the-serviceserviceexport-objects)
+  - [Sharing services without a clusterset](#sharing-services-without-a-clusterset)
 - [Infrastructure Needed](#infrastructure-needed)
 <!-- /toc -->
 
@@ -290,7 +292,7 @@ nitty-gritty.
     https://github.com/kubernetes/community/blob/master/sig-multicluster/namespace-sameness-position-statement.md
 
 We propose a new CRD called `ServiceExport`, used to specify which services
-should be exposed across all clusters in the clusterset. `ServiceExports` must
+should be exposed to other clusters in the clusterset. `ServiceExports` must
 be created in each cluster that the underlying `Service` resides in. Creation of
 a `ServiceExport` in a cluster will signify that the `Service` with the same
 name and namespace as the export should be visible to other clusters in the
@@ -300,13 +302,14 @@ Another CRD called `ServiceImport` will be introduced to act as the in-cluster
 representation of a multi-cluster service in each importing cluster. This is
 analogous to the traditional `Service` type in Kubernetes. Importing clusters
 will have a corresponding `ServiceImport` for each uniquely named `Service` that
-has been exported within the clusterset, referenced by namespaced name.
+they export or that has been exported to them, referenced by namespaced name.
 `ServiceImport` resources will be managed by the MCS implementation's
 mcs-controller.
 
-If multiple clusters export a `Service` with the same namespaced name, they will
-be recognized as a single combined service. For example, if 5 clusters export
-`my-svc.my-ns`, each importing cluster will have one `ServiceImport` named
+If multiple clusters export a `Service` with the same namespaced name to the
+same cluster, they will be recognized as a single combined service in that
+cluster. For example, if 5 clusters export `my-svc.my-ns` to all other clusters
+in the clusterset, each importing cluster will have one `ServiceImport` named
 `my-svc` in the `my-ns` namespace and it will be associated with endpoints from
 all exporting clusters. Properties of the `ServiceImport` (e.g. ports, topology)
 will be derived from a merger of component `Service` properties.
@@ -351,6 +354,18 @@ removal without action by or impact on the caller. Routing to my replicated
 service should optimize for cost metric (e.g. prioritize traffic local to zone,
 region).
 
+#### Service Exported to a Subset of Clusters
+
+I have clusters A, B, C and D in one clusterset. The foo and bar teams share
+clusters A and B. The billing team has stricter security requirements and
+runs only in clusters C and D. The `invoices` service in cluster C is used by
+the foo and bar services in clusters A and B. The `ledger` service in cluster
+C is used only by the billing reports in cluster D. I want each billing
+service to be visible only to the clusters that use it, so that the ledger is
+never visible to clusters A or B.
+
+![four clusters in one clusterset where the billing team's services are exported only to the clusters that use them](./export-to-a-subset-of-clusters.svg)
+
 #### Troubleshooting a Service Export
 
 I operate a cluster that exports services to other clusters in a clusterset.
@@ -390,6 +405,9 @@ Consider including folks that also work outside the SIG or subproject.
 which clusters the service is exported to. Implementations may leave the field
 absent (see [Exporting Services](#exporting-services)).
 
+Consumers that assume every cluster in the clusterset imports every exported
+service may look for a `ServiceImport` or endpoints that do not exist.
+
 ## Design Details
 
 <!--
@@ -404,6 +422,9 @@ Services will not be visible to other clusters in the clusterset by default.
 They must be explicitly marked for export by the user. This allows users to
 decide exactly which services should be visible outside of the local cluster.
 
+A service may be exported to all other clusters in the clusterset or only to
+some of them. Which clusters it is exported to is implementation-defined.
+
 Tooling may (and likely will, in the future) be built on top of this to simplify
 the user experience. Some initial ideas are to allow users to specify that all
 services in a given namespace or in a namespace selector or even a whole cluster
@@ -411,8 +432,8 @@ should be automatically exported by default. In that case, a `ServiceExport`
 could be automatically created for all `Services`. This tooling will be designed
 in a separate doc, and is secondary to the main API proposed here.
 
-To mark a service for export to the clusterset, a user will create a
-ServiceExport CR:
+To mark a service for export to other clusters in the clusterset, a user will
+create a ServiceExport CR:
 
 ```golang
 // ServiceExport declares that the associated service should be exported to
@@ -496,8 +517,8 @@ To export a service, a `ServiceExport` should be created within the cluster and
 namespace that the service resides in, name-mapped to the service for export -
 that is, they reference the `Service` with the same name as the export. If
 multiple clusters within the clusterset have `ServiceExports` with the same name
-and namespace, these will be considered the same service and will be combined at
-the clusterset level.
+and namespace, these will be considered the same service and will be combined in
+each importing cluster.
 
 _Note: A `Service` without a corresponding `ServiceExport` in its local cluster
 will not be exported even if other clusters are exporting a `Service` with the
@@ -562,9 +583,12 @@ includes 3 scenarios:
 
 A multi-cluster service will be imported only by clusters in which the service's
 namespace exists. All clusters containing the service's namespace will import
-the service. This means that all exporting clusters will also import the
+the service if it is exported to them. Exporting clusters always import the
 multi-cluster service. _An implementation may or may not decide to create
 missing namespaces automatically, that behavior is out of scope of this spec._
+
+A cluster's `ServiceImport` combines only the local `ServiceExport`, if any, and
+the `ServiceExport`s in other clusters that export the service to it.
 
 Because of the potential wide impact a `ServiceImport` may have within a
 cluster, non-cluster-admin users should not be allowed to create or modify
@@ -578,11 +602,10 @@ via its status conditions field.
 
 For each exported service, one `ServiceExport` will exist in each cluster that
 exports the service. The mcs-controller will create and maintain a derived
-`ServiceImport` in each cluster within the clusterset so long as the service's
-namespace exists (see: [constraints and conflict
-resolution](#constraints-and-conflict-resolution)). If all `ServiceExport`
-instances are deleted, each `ServiceImport` will also be deleted from all
-clusters.
+`ServiceImport` in each importing cluster so long as the service's namespace
+exists (see: [constraints and conflict
+resolution](#constraints-and-conflict-resolution)). A cluster's `ServiceImport`
+will be deleted when all the `ServiceExport`s it combines are deleted.
 
 ```golang
 // ServiceImport describes a service imported from clusters in a clusterset.
@@ -799,15 +822,14 @@ section provides an overview of the multicluster DNS specification and its
 rationale, and assumes familiarity with in-cluster Service DNS behavior.
 
 In short, when a `ServiceExport` is created, this will cause a domain name for
-the multi-cluster service to become accessible from within the clusterset. The
+the multi-cluster service to become accessible from the importing clusters. The
 domain name will be `<service>.<ns>.svc.clusterset.local`. This domain name
 operates differently depending on whether the `ServiceExport` refers to a
 ClusterSetIP or Headless service:
 
   * **ClusterSetIP services:** Requests to this domain name from within an
 importing cluster will resolve to the clusterset IP. Requests to this IP will be
-spread across all endpoints exported with `ServiceExport`s across the
-clusterset.
+spread across all endpoints imported by that cluster.
   * **Headless services:** Within an importing cluster, the clusterset domain
 name will have multiple `A`/`AAAA` records, each containing the address of a
 ready endpoint of the headless service. `<service>.<ns>.svc.clusterset.local`
@@ -906,7 +928,7 @@ In both cases, this restriction seeks to preserve the MCS position on [namespace
 sameness](https://github.com/kubernetes/community/blob/master/sig-multicluster/namespace-sameness-position-statement.md).
 Services of the same name/namespace exported in the multicluster environment are
 considered to be the same by definition, and thus their backends are safe to
-'merge' at the clusterset level. If these backends need to be addressed
+'merge' in each importing cluster. If these backends need to be addressed
 differently based on other properties than name and namespace, they lose their
 fungible nature which the MCS API depends on. In these situations, those
 backends should instead be fronted by a Service with a different name and/or
@@ -1079,11 +1101,12 @@ directly impact service consumption and must be consistent across all child
 services. If these properties are out of sync for a subset of exported services,
 there is no clear way to determine how a service should be accessed.
 
-Conflict resolution policy: **If any properties have conflicting values that can
-not simply be merged, a `Conflict` condition with a `true` status will be set
-on all `ServiceExport`s for the conflicted service with a description of the conflict.
-The conflict will be resolved by assigning precedence based on each
-`ServiceExport`'s `creationTimestamp`, from oldest to newest.**
+Conflict resolution policy: **If any properties of the `ServiceExport`s
+combined by a `ServiceImport` have conflicting values that can not simply be
+merged, a `Conflict` condition with a `true` status will be set on all of those
+`ServiceExport`s with a description of the conflict. The conflict will be
+resolved by assigning precedence based on each `ServiceExport`'s
+`creationTimestamp`, from oldest to newest.**
 
 **Note:** When a `ServiceExport`'s conflict condition changes from `False` to `True` due to this resolution policy, runtime traffic remains unaffected. The oldest cluster will win the conflict and continue to be referenced in the `ServiceImport`, maintaining service continuity. Conversely, when the conflict condition transitions from `True` to `False` (for example, when the oldest cluster's service is unexported), the `ServiceImport` may remain unchanged to avoid potentially disruptive changes to active traffic patterns.  
 
@@ -1403,6 +1426,13 @@ flexibility, as it will allow to export labels and annotations fully decorrelate
 from the `Service` and `ServiceExport` metadata. More flexibility could also be
 achieved with CEL expression on the `ServiceExport` at the cost of greater
 complexity (managing CEL expressions on potentially many `ServiceExport` across clusters).
+
+### Sharing services without a clusterset
+
+Services could be shared between individual clusters without a clusterset, so
+that no namespace sameness would be assumed. This was ruled out in favor of
+exporting a service to a subset of the clusterset, which keeps namespace
+sameness and the single authority per namespace.
 
 ## Infrastructure Needed
 <!--
