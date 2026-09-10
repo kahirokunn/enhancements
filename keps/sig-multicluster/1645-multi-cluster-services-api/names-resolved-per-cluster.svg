@@ -1,0 +1,71 @@
+<svg version="1.1" viewBox="0 0 960 650" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="960" height="650" fill="#ffffff"/>
+
+  <!-- DNS scopes: each dashed circle is the set of clusters that resolve the names exported by one cluster -->
+  <circle cx="200" cy="260" r="150" fill="#c9daf8" fill-opacity="0.45" stroke="#3c78d8" stroke-width="1.5" stroke-dasharray="6.0,3.0"/>
+  <circle cx="400" cy="210" r="150" fill="#fce5cd" fill-opacity="0.45" stroke="#e69138" stroke-width="1.5" stroke-dasharray="6.0,3.0"/>
+  <circle cx="520" cy="380" r="150" fill="#f4cccc" fill-opacity="0.45" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6.0,3.0"/>
+  <circle cx="725" cy="330" r="150" fill="#d9ead3" fill-opacity="0.45" stroke="#6aa84f" stroke-width="1.5" stroke-dasharray="6.0,3.0"/>
+  <circle cx="220" cy="475" r="150" fill="#d9d2e9" fill-opacity="0.45" stroke="#674ea7" stroke-width="1.5" stroke-dasharray="6.0,3.0"/>
+
+  <text x="200" y="130" font-family="Arial, sans-serif" font-size="11" font-style="italic" fill="#3c78d8" text-anchor="middle">exports from A</text>
+  <text x="400" y="76" font-family="Arial, sans-serif" font-size="11" font-style="italic" fill="#e69138" text-anchor="middle">exports from E</text>
+  <text x="520" y="520" font-family="Arial, sans-serif" font-size="11" font-style="italic" fill="#cc0000" text-anchor="middle">exports from H</text>
+  <text x="725" y="202" font-family="Arial, sans-serif" font-size="11" font-style="italic" fill="#6aa84f" text-anchor="middle">exports from K</text>
+  <text x="220" y="614" font-family="Arial, sans-serif" font-size="11" font-style="italic" fill="#674ea7" text-anchor="middle">exports from N</text>
+
+  <!-- export connections: exporting cluster to each cluster it exports to -->
+  <line x1="170" y1="240" x2="300" y2="235" stroke="#3c78d8" stroke-width="1"/>
+  <line x1="170" y1="240" x2="210" y2="367" stroke="#3c78d8" stroke-width="1"/>
+  <line x1="170" y1="240" x2="115" y2="300" stroke="#3c78d8" stroke-width="1"/>
+  <line x1="400" y1="170" x2="300" y2="235" stroke="#e69138" stroke-width="1"/>
+  <line x1="400" y1="170" x2="455" y2="125" stroke="#e69138" stroke-width="1"/>
+  <line x1="400" y1="170" x2="460" y2="295" stroke="#e69138" stroke-width="1"/>
+  <line x1="520" y1="420" x2="460" y2="295" stroke="#cc0000" stroke-width="1"/>
+  <line x1="520" y1="420" x2="622" y2="355" stroke="#cc0000" stroke-width="1"/>
+  <line x1="520" y1="420" x2="440" y2="445" stroke="#cc0000" stroke-width="1"/>
+  <line x1="745" y1="310" x2="622" y2="355" stroke="#6aa84f" stroke-width="1"/>
+  <line x1="745" y1="310" x2="780" y2="415" stroke="#6aa84f" stroke-width="1"/>
+  <line x1="745" y1="310" x2="700" y2="225" stroke="#6aa84f" stroke-width="1"/>
+  <line x1="235" y1="505" x2="210" y2="367" stroke="#674ea7" stroke-width="1"/>
+  <line x1="235" y1="505" x2="150" y2="540" stroke="#674ea7" stroke-width="1"/>
+  <line x1="235" y1="505" x2="285" y2="555" stroke="#674ea7" stroke-width="1"/>
+
+  <!-- clusters: colored box = exporting cluster, white box = importing cluster -->
+  <rect x="134" y="227" width="72" height="26" rx="4" fill="#c9daf8" stroke="#595959" stroke-width="1"/>
+  <text x="170" y="244.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster A</text>
+  <rect x="264" y="222" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="300" y="239.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster B</text>
+  <rect x="174" y="354" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="210" y="371.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster C</text>
+  <rect x="79" y="287" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="115" y="304.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster D</text>
+
+  <rect x="364" y="157" width="72" height="26" rx="4" fill="#fce5cd" stroke="#595959" stroke-width="1"/>
+  <text x="400" y="174.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster E</text>
+  <rect x="419" y="112" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="455" y="129.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster F</text>
+  <rect x="424" y="282" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="460" y="299.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster G</text>
+
+  <rect x="484" y="407" width="72" height="26" rx="4" fill="#f4cccc" stroke="#595959" stroke-width="1"/>
+  <text x="520" y="424.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster H</text>
+  <rect x="586" y="342" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="622" y="359.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster I</text>
+  <rect x="404" y="432" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="440" y="449.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster J</text>
+
+  <rect x="709" y="297" width="72" height="26" rx="4" fill="#d9ead3" stroke="#595959" stroke-width="1"/>
+  <text x="745" y="314.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster K</text>
+  <rect x="744" y="402" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="780" y="419.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster L</text>
+  <rect x="664" y="212" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="700" y="229.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster M</text>
+
+  <rect x="199" y="492" width="72" height="26" rx="4" fill="#d9d2e9" stroke="#595959" stroke-width="1"/>
+  <text x="235" y="509.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster N</text>
+  <rect x="114" y="527" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="150" y="544.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster O</text>
+  <rect x="249" y="542" width="72" height="26" rx="4" fill="#ffffff" stroke="#595959" stroke-width="1"/>
+  <text x="285" y="559.5" font-family="Arial, sans-serif" font-size="12" fill="#000000" text-anchor="middle">Cluster P</text>
+</svg>

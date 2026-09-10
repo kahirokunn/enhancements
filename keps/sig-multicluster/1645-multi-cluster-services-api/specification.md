@@ -190,7 +190,7 @@ must be created to cover both IPv4 and IPv6 assigned pod IPs._
 
 Given a headless Service named `<service>` in Namespace `<ns>` that has been
 exported via a name-mapped ServiceExport with name `<service>`, for a subset of
-_ready_ endpoints accessible across the cluster set with the IPv4 address
+_ready_ endpoints accessible from a given cluster with the IPv4 address
 `<endpoint-ip>`, the following records must exist.
 
 The subset of _ready_ endpoints _may_ be all _ready_ endpoints, but the exact
@@ -284,8 +284,8 @@ prescribed by this specification.
 Unnamed ports do not have an `SRV` record.
 
 In the following example, the cluster ID for each answer example is in bold to
-emphasize that the union of records from all clusters are returned by a SRV
-record request.
+emphasize that the union of records from all clusters the service is imported
+from are returned by a SRV record request.
 
 *   Question Example:
     *    `_https._tcp.headless.test.svc.clusterset.local. IN SRV`
