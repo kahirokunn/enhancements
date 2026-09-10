@@ -77,7 +77,7 @@ the aggregated Service.”
 Cluster ID / `<clusterid>` = the cluster id stored in the
 `cluster.clusterset.k8s.io ClusterProperty` as described in [KEP-2149:
 ClusterId for ClusterSet identification](../2149-clusterid/README.md). The
-recommended value is a kube-system namespace uid ( such as
+recommended value is a kube-system namespace uid (such as
 `721ab723-13bc-11e5-aec2-42010af0021e`). For ease of KEP readability, this
 document uses human readable names `cluster-a` and `cluster-b` to represent the
 cluster IDs of two clusters in a ClusterSet.
