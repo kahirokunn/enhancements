@@ -431,12 +431,13 @@ They must be explicitly marked for export by the user. This allows users to
 decide exactly which services should be visible outside of the local cluster.
 
 A service may be exported to any set of other clusters. Which clusters it is
-exported to is implementation-defined. The figure below shows one set of
-exports under both definitions of a clusterset: one clusterset for all
-services, spanning A, B, C and D, or a clusterset per service, spanning A and
-B for `foo`, A, B and C for `invoices`, and C and D for `ledger`.
+exported to is implementation-defined. In the figure below, exporting every
+service to all other clusters makes A, B, C and D one clusterset. Exporting
+each service only to the clusters that use it makes a clusterset per service,
+spanning A and B for `foo`, A, B and C for `invoices`, and C and D for
+`ledger`.
 
-![four clusters and three exported services, shown as one clusterset and as a clusterset per service](./one-clusterset-or-one-per-service.svg)
+![four clusters and three exported services, exported to every other cluster as one clusterset and only to the clusters that use them as a clusterset per service](./one-clusterset-or-one-per-service.svg)
 
 In the figure below, `web` and `api` are exported to the same clusters and
 share one clusterset, while `db` is exported to B only and has its own.
